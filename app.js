@@ -13,7 +13,7 @@ const { specs, swaggerUi } = require('./swaggerConfig');
 dotenv.config();
 
 mongoose.Promise = global.Promise;
-mongoose
+mongoose.set('strictQuery', false)
     .connect('mongodb://127.0.0.1/teacher-student')
     .then(() => console.log('connection successful'))
     .catch((err) => console.error(err));

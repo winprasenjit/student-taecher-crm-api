@@ -1,1 +1,1 @@
-mongod --dbpath F:\Code\Programming\Mongo\teacher-student-crm
+mongod --dbpath C:\data
