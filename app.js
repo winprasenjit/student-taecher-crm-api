@@ -24,6 +24,7 @@ require('./models/Subject');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var subjectRouter = require('./routes/subjects');
+var teacherRouter = require('./routes/teachers');
 
 var app = express();
 var whitelist = ['http://localhost:3000'];
@@ -63,6 +64,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/subjects', subjectRouter);
+app.use('/teachers', teacherRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

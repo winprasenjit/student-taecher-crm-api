@@ -25,3 +25,5 @@ module.exports = {
   specs,
   swaggerUi,
 };
+
+// http://localhost:5000/api-docs/
