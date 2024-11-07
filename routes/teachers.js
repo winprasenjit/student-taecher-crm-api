@@ -39,7 +39,7 @@ const Teacher = mongoose.model('User');
   });
 }); */
 
-//GET subjects listing.
+//GET teachers listing.
 router.get('/', function (req, res, next) {
   Teacher.find({ type }, async function (err, users) {
     if (err) {
@@ -55,16 +55,16 @@ router.get('/', function (req, res, next) {
   });
 });
 
-//Add subject to mongodb
-/* router.post('/', function (req, res, next) {
-  var subject = new Subject(req.body);
-  subject.save(function (err, subject) {
+//Add tescher to mongodb
+router.post('/', function (req, res, next) {
+  var teacher = new Teacher(req.body);
+  teacher.save(function (err, teacher) {
     if (err) {
       return next(err);
     }
-    res.json(subject);
+    res.json(teacher);
   });
-}); */
+}); 
 
 //Add subject to mongodb
 /* router.put('/', function (req, res, next) {
