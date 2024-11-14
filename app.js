@@ -25,6 +25,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var subjectRouter = require('./routes/subjects');
 var teacherRouter = require('./routes/teachers');
+var studentRouter = require('./routes/students');
 
 var app = express();
 var whitelist = ['http://localhost:3000'];
@@ -65,6 +66,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/subjects', subjectRouter);
 app.use('/teachers', teacherRouter);
+app.use('/students', studentRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

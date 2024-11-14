@@ -1,12 +1,12 @@
 /**
  * @swagger
- * /teachers:
+ * /students:
  *   get:
- *     summary: Returns a list of teachers
+ *     summary: Returns a list of students
  *     description: Optional extended description in Markdown
  *     responses:
  *       200:
- *         description: A list of teachers
+ *         description: A list of students
  *         content:
  *           application/json:
  *             schema:
@@ -23,77 +23,77 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const type = 'teacher';
-const Teacher = mongoose.model('User');
+const type = 'student';
+const Student = mongoose.model('User');
 
-//GET specific teacher
+//GET specific student
 router.get('/:id', function (req, res, next) {
-  Teacher.findOne({ _id: req.params.id }, function (err, subject) {
+  Student.findOne({ _id: req.params.id }, function (err, subject) {
     if (err) {
       return next(err);
     }
     if (subject) {
       res.json(subject);
     } else {
-      res.status(400).send('No Teacher found');
+      res.status(400).send('No Student found');
     }
   });
 });
 
-//GET teachers listing.
+//GET students listing.
 router.get('/', function (req, res, next) {
-  Teacher.find({ type }, async function (err, users) {
+  Student.find({ type }, async function (err, users) {
     if (err) {
       return next(err);
     }
 
-    const teachers = users.map((user) => {
+    const students = users.map((user) => {
       user.name = user.firstname + ' ' + user.lastname;
       return user;
     });
 
-    res.json(teachers);
+    res.json(students);
   });
 });
 
-//Add teacher to mongodb
+//Add student to mongodb
 router.post('/', function (req, res, next) {
-  const teacher = new Teacher(req.body);
-  teacher.save(function (err, teacher) {
+  const student = new Student(req.body);
+  student.save(function (err, student) {
     if (err) {
       return next(err);
     }
-    res.json(teacher);
+    res.json(student);
   });
 }); 
 
-//update teacher
+//update student
  router.put('/', function (req, res, next) {
-  Teacher.findOne({ _id: req.body._id }, function (err, teacher) {
+  Student.findOne({ _id: req.body._id }, function (err, student) {
     if (err) {
       return res.status(500).send(err);
     }
 
     for (var x in req.body) {
-      teacher[x] = req.body[x] || teacher[x];
+      student[x] = req.body[x] || student[x];
     }
 
-    teacher.save(function (err, teacher) {
+    student.save(function (err, student) {
       if (err) {
         res.status(500).send(err);
       }
-      res.send(teacher);
+      res.send(student);
     });
   });
 });
 
-//Delete a teacher
+//Delete a student
  router.delete('/:id', function (req, res, next) {
-  Teacher.remove({ _id: req.params.id }, function (err, subject) {
+  Student.remove({ _id: req.params.id }, function (err, subject) {
     if (err) throw err;
     res.json({
       success: true,
-      message: 'Teacher successfully deleted!',
+      message: 'Student successfully deleted!',
     });
   });
 });
