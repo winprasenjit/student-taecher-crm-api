@@ -20,11 +20,13 @@ mongoose.set('strictQuery', false)
 
 require('./models/User');
 require('./models/Subject');
+require('./models/Academic');
 require('./models/Batch');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const subjectRouter = require('./routes/subjects');
+const academicRouter = require('./routes/academics');
 const teacherRouter = require('./routes/teachers');
 const studentRouter = require('./routes/students');
 const batchRouter = require('./routes/batches');
@@ -67,6 +69,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/subjects', subjectRouter);
+app.use('/academics', academicRouter);
 app.use('/teachers', teacherRouter);
 app.use('/students', studentRouter);
 app.use('/batches', batchRouter);

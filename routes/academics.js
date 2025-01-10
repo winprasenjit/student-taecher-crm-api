@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /subjects:
+ * /academics:
  *   get:
  *     summary: Returns a list of academics
  *     description: Optional extended description in Markdown
@@ -24,71 +24,83 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Subject = mongoose.model('Subject');
+const Academic = mongoose.model('Academic');
+const User = mongoose.model('User');
 
 router.get('/:id', function (req, res, next) {
-  Subject.findOne({ _id: req.params.id }, function (err, subject) {
+  Academic.findOne({_id: req.params.id}, function (err, academic) {
     if (err) {
       return next(err);
     }
-    if (subject) {
-      res.json(subject);
+    if (academic) {
+      res.json(academic);
     } else {
       res.status(400).send('No User found');
     }
   });
 });
 
-//GET subjects listing.
+//GET academics listing.
 router.get('/', function (req, res, next) {
-  Subject.find(function (err, subjects) {
+  Academic.find(function (err, academics) {
     if (err) {
       return next(err);
     }
-    res.json(subjects);
+    res.json(academics);
   });
 });
 
-//Add subject to mongodb
+//Add academic to mongodb
 router.post('/', function (req, res, next) {
-  var subject = new Subject(req.body);
-  subject.save(function (err, subject) {
+  const academic = new Academic(req.body);
+  academic.save(function (err, academic) {
     if (err) {
       return next(err);
     }
-    res.json(subject);
+    res.json(academic);
   });
 });
 
-//Add subject to mongodb
+//Add academic to mongodb
 router.put('/', function (req, res, next) {
-  Subject.findOne({ _id: req.body._id }, function (err, subject) {
+  Academic.findOne({_id: req.body._id}, function (err, academic) {
     if (err) {
       return res.status(500).send(err);
     }
 
-    for (var x in req.body) {
-      subject[x] = req.body[x] || subject[x];
+    for (const x in req.body) {
+      academic[x] = req.body[x] || academic[x];
     }
 
-    subject.save(function (err, subject) {
+    academic.save(function (err, academic) {
       if (err) {
         res.status(500).send(err);
       }
-      res.send(subject);
+      res.send(academic);
     });
   });
 });
 
-//Delete subject from mongodb
+//Delete academic from mongodb
 router.delete('/:id', function (req, res, next) {
-  Subject.remove({ _id: req.params.id }, function (err, subject) {
+  Academic.remove({_id: req.params.id}, function (err, academic) {
     if (err) throw err;
     res.json({
       success: true,
-      message: 'Subject successfully deleted!',
+      message: 'Academic successfully deleted!',
     });
   });
+});
+
+//GET academic user listing.
+router.get('/batch/:batchId', async function (req, res, next) {
+  try {
+    const batchId = req.params.batchId;
+    const usersInAcademics = await User.find({qualification: batchId}).populate("qualification", "name");
+    res.json(usersInAcademics);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
 });
 
 module.exports = router;
