@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     name: String,
     firstname: String,
     lastname: String,
@@ -10,6 +10,7 @@ var UserSchema = new mongoose.Schema({
     email: String,
     type: String,
     class: String,
+    qualification: { type: mongoose.Schema.Types.ObjectId, ref: "Academic" },
     aboutu: String,
     sex: String,
 });
