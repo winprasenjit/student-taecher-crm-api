@@ -42,11 +42,10 @@ router.get('/:id', function (req, res, next) {
 
 //GET students listing.
 router.get('/', function (req, res, next) {
-  Student.find({ type }, async function (err, users) {
+  Student.find().populate('qualification').exec(function (err, users) {
     if (err) {
       return next(err);
     }
-
     const students = users.map((user) => {
       user.name = user.firstname + ' ' + user.lastname;
       return user;
