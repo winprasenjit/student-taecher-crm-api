@@ -28,7 +28,7 @@ const Teacher = mongoose.model('User');
 
 //GET specific teacher
 router.get('/:id', function (req, res, next) {
-  Teacher.findOne({ _id: req.params.id }, function (err, subject) {
+  Teacher.findOne({_id: req.params.id}, function (err, subject) {
     if (err) {
       return next(err);
     }
@@ -42,11 +42,10 @@ router.get('/:id', function (req, res, next) {
 
 //GET teachers listing.
 router.get('/', function (req, res, next) {
-  Teacher.find({ type }, async function (err, users) {
+  Teacher.find().populate('qualification').exec(function (err, users) {
     if (err) {
       return next(err);
     }
-
     const teachers = users.map((user) => {
       user.name = user.firstname + ' ' + user.lastname;
       return user;
@@ -65,16 +64,16 @@ router.post('/', function (req, res, next) {
     }
     res.json(teacher);
   });
-}); 
+});
 
 //update teacher
- router.put('/', function (req, res, next) {
-  Teacher.findOne({ _id: req.body._id }, function (err, teacher) {
+router.put('/', function (req, res, next) {
+  Teacher.findOne({_id: req.body._id}, function (err, teacher) {
     if (err) {
       return res.status(500).send(err);
     }
 
-    for (var x in req.body) {
+    for (const x in req.body) {
       teacher[x] = req.body[x] || teacher[x];
     }
 
@@ -88,8 +87,8 @@ router.post('/', function (req, res, next) {
 });
 
 //Delete a teacher
- router.delete('/:id', function (req, res, next) {
-  Teacher.remove({ _id: req.params.id }, function (err, subject) {
+router.delete('/:id', function (req, res, next) {
+  Teacher.remove({_id: req.params.id}, function (err, subject) {
     if (err) throw err;
     res.json({
       success: true,
