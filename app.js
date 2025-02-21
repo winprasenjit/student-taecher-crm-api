@@ -22,6 +22,7 @@ require('./models/User');
 require('./models/Subject');
 require('./models/Academic');
 require('./models/Batch');
+require('./models/Class');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -29,6 +30,7 @@ const subjectRouter = require('./routes/subjects');
 const academicRouter = require('./routes/academics');
 const teacherRouter = require('./routes/teachers');
 const studentRouter = require('./routes/students');
+const classRouter = require('./routes/classes');
 const batchRouter = require('./routes/batches');
 
 const app = express();
@@ -72,6 +74,7 @@ app.use('/subjects', subjectRouter);
 app.use('/academics', academicRouter);
 app.use('/teachers', teacherRouter);
 app.use('/students', studentRouter);
+app.use('/classes', classRouter);
 app.use('/batches', batchRouter);
 
 // catch 404 and forward to error handler
