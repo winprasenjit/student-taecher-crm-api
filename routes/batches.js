@@ -1,12 +1,12 @@
 /**
  * @swagger
- * /subjects:
+ * /batch:
  *   get:
- *     summary: Returns a list of academics
+ *     summary: Returns a list of users
  *     description: Optional extended description in Markdown
  *     responses:
  *       200:
- *         description: A list of academics
+ *         description: A list of users
  *         content:
  *           application/json:
  *             schema:
@@ -24,69 +24,69 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Subject = mongoose.model('Subject');
+const Batch = mongoose.model('Batch');
 
 router.get('/:id', function (req, res, next) {
-  Subject.findOne({ _id: req.params.id }, function (err, subject) {
+  Batch.findOne({ _id: req.params.id }, function (err, batch) {
     if (err) {
       return next(err);
     }
-    if (subject) {
-      res.json(subject);
+    if (batch) {
+      res.json(batch);
     } else {
       res.status(400).send('No User found');
     }
   });
 });
 
-//GET subjects listing.
+//GET batch listing.
 router.get('/', function (req, res, next) {
-  Subject.find(function (err, subjects) {
+  Batch.find(function (err, batch) {
     if (err) {
       return next(err);
     }
-    res.json(subjects);
+    res.json(batch);
   });
 });
 
-//Add subject to mongodb
+//Add batch to mongodb
 router.post('/', function (req, res, next) {
-  var subject = new Subject(req.body);
-  subject.save(function (err, subject) {
+  var batch = new Batch(req.body);
+  batch.save(function (err, batch) {
     if (err) {
       return next(err);
     }
-    res.json(subject);
+    res.json(batch);
   });
 });
 
-//Add subject to mongodb
+//Add batch to mongodb
 router.put('/', function (req, res, next) {
-  Subject.findOne({ _id: req.body._id }, function (err, subject) {
+  Batch.findOne({ _id: req.body._id }, function (err, batch) {
     if (err) {
       return res.status(500).send(err);
     }
 
     for (var x in req.body) {
-      subject[x] = req.body[x] || subject[x];
+      batch[x] = req.body[x] || batch[x];
     }
 
-    subject.save(function (err, subject) {
+    batch.save(function (err, batch) {
       if (err) {
         res.status(500).send(err);
       }
-      res.send(subject);
+      res.send(batch);
     });
   });
 });
 
-//Delete subject from mongodb
+//Delete batch from mongodb
 router.delete('/:id', function (req, res, next) {
-  Subject.remove({ _id: req.params.id }, function (err, subject) {
+  Batch.remove({ _id: req.params.id }, function (err, batch) {
     if (err) throw err;
     res.json({
       success: true,
-      message: 'Subject successfully deleted!',
+      message: 'Batch successfully deleted!',
     });
   });
 });

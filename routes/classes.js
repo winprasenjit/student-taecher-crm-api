@@ -24,69 +24,71 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Subject = mongoose.model('Subject');
+const Class = mongoose.model('Class');
 
 router.get('/:id', function (req, res, next) {
-  Subject.findOne({ _id: req.params.id }, function (err, subject) {
+  Class.findOne({ _id: req.params.id }, function (err, sClass) {
     if (err) {
       return next(err);
     }
-    if (subject) {
-      res.json(subject);
+    if (sClass) {
+      res.json(sClass);
     } else {
-      res.status(400).send('No User found');
+      res.status(400).send('No Class found');
     }
   });
 });
 
-//GET subjects listing.
+//GET classes listing.
 router.get('/', function (req, res, next) {
-  Subject.find(function (err, subjects) {
+    Class.find(function (err, sClasses) {
     if (err) {
       return next(err);
     }
-    res.json(subjects);
+    res.json(sClasses);
   });
 });
 
-//Add subject to mongodb
+//Add class to mongodb
 router.post('/', function (req, res, next) {
-  var subject = new Subject(req.body);
-  subject.save(function (err, subject) {
+    // console.log("sukanta", req.body);
+  var sClass = new Class(req.body);
+  sClass.save(function (err, sClass) {
     if (err) {
       return next(err);
     }
-    res.json(subject);
+    console.log(sClass);
+    res.json(sClass);
   });
 });
 
-//Add subject to mongodb
+//Edit class to mongodb
 router.put('/', function (req, res, next) {
-  Subject.findOne({ _id: req.body._id }, function (err, subject) {
+  Class.findOne({ _id: req.body._id }, function (err, sClass) {
     if (err) {
       return res.status(500).send(err);
     }
 
     for (var x in req.body) {
-      subject[x] = req.body[x] || subject[x];
+      sClass[x] = req.body[x] || sClass[x];
     }
 
-    subject.save(function (err, subject) {
+    sClass.save(function (err, sClass) {
       if (err) {
         res.status(500).send(err);
       }
-      res.send(subject);
+      res.send(sClass);
     });
   });
 });
 
-//Delete subject from mongodb
+//Delete class from mongodb
 router.delete('/:id', function (req, res, next) {
-  Subject.remove({ _id: req.params.id }, function (err, subject) {
+  Class.remove({ _id: req.params.id }, function (err, sClass) {
     if (err) throw err;
     res.json({
       success: true,
-      message: 'Subject successfully deleted!',
+      message: 'Class successfully deleted!',
     });
   });
 });

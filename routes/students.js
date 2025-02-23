@@ -1,12 +1,12 @@
 /**
  * @swagger
- * /subjects:
+ * /students:
  *   get:
- *     summary: Returns a list of academics
+ *     summary: Returns a list of students
  *     description: Optional extended description in Markdown
  *     responses:
  *       200:
- *         description: A list of academics
+ *         description: A list of students
  *         content:
  *           application/json:
  *             schema:
@@ -23,70 +23,76 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const type = 'student';
+const Student = mongoose.model('User');
 
-const Subject = mongoose.model('Subject');
-
+//GET specific student
 router.get('/:id', function (req, res, next) {
-  Subject.findOne({ _id: req.params.id }, function (err, subject) {
+  Student.findOne({ _id: req.params.id }, function (err, subject) {
     if (err) {
       return next(err);
     }
     if (subject) {
       res.json(subject);
     } else {
-      res.status(400).send('No User found');
+      res.status(400).send('No Student found');
     }
   });
 });
 
-//GET subjects listing.
+//GET students listing.
 router.get('/', function (req, res, next) {
-  Subject.find(function (err, subjects) {
+  Student.find().populate('qualification').exec(function (err, users) {
     if (err) {
       return next(err);
     }
-    res.json(subjects);
+    const students = users.map((user) => {
+      user.name = user.firstname + ' ' + user.lastname;
+      return user;
+    });
+
+    res.json(students);
   });
 });
 
-//Add subject to mongodb
+//Add student to mongodb
 router.post('/', function (req, res, next) {
-  var subject = new Subject(req.body);
-  subject.save(function (err, subject) {
+  const student = new Student(req.body);
+  student.save(function (err, student) {
     if (err) {
       return next(err);
     }
-    res.json(subject);
+    res.json(student);
   });
-});
+}); 
 
-//Add subject to mongodb
-router.put('/', function (req, res, next) {
-  Subject.findOne({ _id: req.body._id }, function (err, subject) {
+//update student
+ router.put('/', function (req, res, next) {
+  Student.findOne({ _id: req.body._id }, function (err, student) {
     if (err) {
       return res.status(500).send(err);
     }
 
     for (var x in req.body) {
-      subject[x] = req.body[x] || subject[x];
+      student[x] = req.body[x] || student[x];
     }
 
-    subject.save(function (err, subject) {
+    student.save(function (err, student) {
       if (err) {
         res.status(500).send(err);
       }
-      res.send(subject);
+      res.send(student);
     });
   });
 });
 
-//Delete subject from mongodb
-router.delete('/:id', function (req, res, next) {
-  Subject.remove({ _id: req.params.id }, function (err, subject) {
+//Delete a student
+ router.delete('/:id', function (req, res, next) {
+  Student.remove({ _id: req.params.id }, function (err, subject) {
     if (err) throw err;
     res.json({
       success: true,
-      message: 'Subject successfully deleted!',
+      message: 'Student successfully deleted!',
     });
   });
 });
