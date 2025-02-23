@@ -23,8 +23,31 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const multer = require('multer');
+const fs = require("fs");
+const path = require("path");
+const DIR = 'public/uploads'; // set the directory for the uploads to the uploaded to
 const type = 'teacher';
 const Teacher = mongoose.model('User');
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    let uploadFolder;
+    if (req.body.target) {
+      uploadFolder = DIR + '/' + req.body.target;
+    } else {
+      uploadFolder = DIR;
+    }
+    if (!fs.existsSync(uploadFolder)) { //create directory if not exist
+      fs.mkdirSync(uploadFolder);
+    }
+    cb(null, uploadFolder)
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
+  }
+})
+const upload = multer({ storage: storage }).single('photo');
 
 //GET specific teacher
 router.get('/:id', function (req, res, next) {
